@@ -1,14 +1,11 @@
 import Link from 'next/link';
-import { requireAdmin } from '@/lib/auth';
+import { getToutesSoirees } from '@/lib/data';
 import { COULEURS } from '@/lib/couleurs';
 import { dateCourte } from '@/lib/format';
-import type { Soiree } from '@/lib/types';
 import { NewSoireeForm } from '@/components/admin/NewSoireeForm';
 
 export default async function AdminHome() {
-  const { sb } = await requireAdmin();
-  const { data } = await sb.from('soirees').select('*').order('date', { ascending: false });
-  const soirees = (data ?? []) as Soiree[];
+  const soirees = await getToutesSoirees();
 
   return (
     <div className="grid gap-12 pt-8 md:grid-cols-[1fr_360px]">

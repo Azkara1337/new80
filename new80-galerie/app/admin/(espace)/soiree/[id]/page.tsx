@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { requireAdmin } from '@/lib/auth';
+import { getRawPhotos, getSoireeById } from '@/lib/data';
 import { accent } from '@/lib/couleurs';
 import { dateLongue, publicUrl } from '@/lib/format';
-import type { Photo, Soiree } from '@/lib/types';
 import { setPublished } from '@/app/admin/actions';
 import { Uploader } from '@/components/admin/Uploader';
 import { CoverPicker } from '@/components/admin/CoverPicker';
@@ -11,11 +10,9 @@ import { PhotoAdminGrid } from '@/components/admin/PhotoAdminGrid';
 
 export default async function AdminSoiree({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { sb } = await requireAdmin();
-  const { data: s } = await sb.from('soirees').select('*').eq('id', id).maybeSingle<Soiree>();
+  const s = await getSoireeById(id);
   if (!s) notFound();
-  const { data } = await sb.from('photos').select('*').eq('soiree_id', id).order('position').range(0, 1999);
-  const photos = (data ?? []) as Photo[];
+  const photos = await getRawPhotos(id);
   const nextPosition = photos.length ? photos[photos.length - 1].position + 1 : 0;
 
   return (

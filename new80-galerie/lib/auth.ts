@@ -1,16 +1,10 @@
-import { redirect } from 'next/navigation';
-import { serverClient } from './supabase/server';
+// Maquette : pas d'authentification, tout visiteur de /admin est considéré comme admin.
+const user = { email: 'demo@new80.fr' };
 
 export async function getAdmin() {
-  const sb = await serverClient();
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return null;
-  const { data: ok } = await sb.rpc('is_admin');
-  return ok ? { sb, user } : null;
+  return { user };
 }
 
 export async function requireAdmin() {
-  const admin = await getAdmin();
-  if (!admin) redirect('/admin/login');
-  return admin;
+  return { user };
 }

@@ -1,26 +1,31 @@
-import { publicClient } from './supabase/public';
+import { store } from './mock';
 import { publicUrl } from './format';
-import type { GalleryPhoto, Photo, Soiree } from './types';
+import type { GalleryPhoto, Soiree } from './types';
+
+const parDate = (a: Soiree, b: Soiree) => b.date.localeCompare(a.date);
 
 export async function getSoireesPubliees(): Promise<Soiree[]> {
-  const { data, error } = await publicClient()
-    .from('soirees').select('*').eq('published', true).order('date', { ascending: false });
-  if (error) throw error;
-  return data as Soiree[];
+  return store.soirees.filter((s) => s.published).sort(parDate);
+}
+
+export async function getToutesSoirees(): Promise<Soiree[]> {
+  return [...store.soirees].sort(parDate);
 }
 
 export async function getSoiree(slug: string): Promise<Soiree | null> {
-  const { data, error } = await publicClient().from('soirees').select('*').eq('slug', slug).maybeSingle();
-  if (error) throw error;
-  return data as Soiree | null;
+  return store.soirees.find((s) => s.slug === slug) ?? null;
+}
+
+export async function getSoireeById(id: string): Promise<Soiree | null> {
+  return store.soirees.find((s) => s.id === id) ?? null;
+}
+
+export async function getRawPhotos(soireeId: string) {
+  return store.photos.filter((p) => p.soiree_id === soireeId).sort((a, b) => a.position - b.position);
 }
 
 export async function getPhotos(soireeId: string): Promise<GalleryPhoto[]> {
-  const { data, error } = await publicClient()
-    .from('photos').select('id,thumb_key,full_key,width,height,color,position')
-    .eq('soiree_id', soireeId).order('position').range(0, 1999);
-  if (error) throw error;
-  return (data as Photo[]).map((p) => ({
+  return (await getRawPhotos(soireeId)).map((p) => ({
     id: p.id, thumb: publicUrl(p.thumb_key), full: publicUrl(p.full_key), width: p.width, height: p.height, color: p.color,
   }));
 }

@@ -17,6 +17,7 @@ export type Soiree = {
 
 export type Photo = {
   id: string;
+  soiree_id: string;
   thumb_key: string;
   full_key: string;
   width: number;

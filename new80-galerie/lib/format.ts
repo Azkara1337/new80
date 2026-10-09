@@ -21,4 +21,6 @@ export function slugify(s: string) {
   return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-export const publicUrl = (key: string) => `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${key}`;
+// Les clés de la maquette sont déjà des URL (chemins /photos/…, data:).
+export const publicUrl = (key: string) =>
+  /^(https?:|data:|blob:|\/)/.test(key) ? key : `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${key}`;

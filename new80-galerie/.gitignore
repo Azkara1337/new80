@@ -1,0 +1,14 @@
+node_modules
+.next
+.open-next
+.wrangler
+.env
+.env.local
+.dev.vars
+next-env.d.ts
+cloudflare-env.d.ts
+*.tsbuildinfo
+.DS_Store
+
+# Originaux (lourds) : seules les versions réduites de public/photos sont déployées
+/photos

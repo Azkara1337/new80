@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { browserClient } from '@/lib/supabase/browser';
+import { addPhoto } from '@/app/admin/actions';
 import { processImage } from '@/lib/image';
 import { retry, uploadProcessed } from '@/lib/upload';
 
@@ -37,13 +37,7 @@ export function Uploader({ soireeId, nextPosition }: { soireeId: string; nextPos
     try {
       const img = await processImage(it.file);
       const keys = await retry(() => uploadProcessed(soireeId, img));
-      await retry(async () => {
-        const { error } = await browserClient().from('photos').insert({
-          soiree_id: soireeId, thumb_key: keys.thumbKey, full_key: keys.fullKey,
-          width: img.width, height: img.height, color: img.color, position: it.position,
-        });
-        if (error) throw error;
-      });
+      await retry(() => addPhoto(soireeId, { ...keys, width: img.width, height: img.height, color: img.color, position: it.position }));
       update(i, { status: 'ok' });
     } catch (e) {
       update(i, { status: 'erreur', error: (e as Error).message });
