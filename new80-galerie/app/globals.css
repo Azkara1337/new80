@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/*
+  Police titre : Anton en attendant la police officielle du club.
+  Pour la remplacer : déclarer la @font-face puis définir --font-club, ex.
+  :root { --font-club: 'New80 Display'; }
+*/
+@theme {
+  --color-noir: #0a0a0b;
+  --color-ink: #f5f3ee;
+  --color-muted: #9a978f;
+  --color-faint: #6b6963;
+  --color-line: #1c1c1f;
+  --color-rouge: #e1261c;
+  --color-bleu: #2f5bff;
+  --color-or: #d4a73c;
+  --font-title: var(--font-club, var(--font-anton)), Impact, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+@layer base {
+  html, body { background: var(--color-noir); color: var(--color-ink); }
+  body { -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  a:hover { color: #fff; }
+}

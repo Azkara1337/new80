@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=Bebas+Neue&family=Oswald:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--font-title:'Anton',Impact,sans-serif;--font-body:'Inter',system-ui,sans-serif;--bg:#0a0a0b;--ink:#f5f3ee}
+body{margin:0;background:#141416;color:#f5f3ee;font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+a{color:#f5f3ee}a:hover{color:#fff}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+</style>
+</helmet>
+<div style="min-height:100vh;box-sizing:border-box;padding:24px 16px;display:flex;justify-content:center;align-items:center;font-family:var(--font-body)">
+  <div style="display:flex;justify-content:center">
+    <sc-for list="{{ frames }}" as="f" hint-placeholder-count="3">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="width:390px;height:min(844px, calc(100vh - 48px));position:relative;overflow:hidden;background:#0a0a0b;border-radius:44px;outline:1px solid #2a2a2e">
+
+          <sc-if value="{{ f.isHome }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;overflow-y:auto;scrollbar-width:none">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:58px 20px 18px">
+                <div data-logo-slot="true" style="font-family:var(--font-title);font-size:30px;line-height:1;letter-spacing:.02em;white-space:nowrap">NEW80</div>
+                <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9a978f">Photos</div>
+              </div>
+              <button onClick="{{ f.openLatest }}" style="display:flex;flex-direction:column;gap:14px;padding:0 16px;width:100%;box-sizing:border-box">
+                <div style="position:relative;width:100%;aspect-ratio:4/5;background:{{ f.latest.cover }}">
+                  <div style="position:absolute;top:12px;left:12px;padding:6px 10px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:{{ f.latest.color }};color:{{ f.latest.ink }}">Dernière soirée</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;padding:0 4px">
+                  <div style="font-family:var(--font-title);font-size:52px;line-height:.95;text-transform:uppercase">{{ f.latest.name }}</div>
+                  <div style="display:flex;gap:10px;align-items:center;font-size:14px;color:#c9c6be">
+                    <span>{{ f.latest.dateLong }}</span>
+                    <span style="width:4px;height:4px;background:{{ f.latest.color }}"></span>
+                    <span>{{ f.latest.count }} photos</span>
+                  </div>
+                  <div style="margin-top:6px;height:52px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;background:{{ f.latest.color }};color:{{ f.latest.ink }}">Voir les photos</div>
+                </div>
+              </button>
+              <div style="padding:44px 20px 12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9a978f">Soirées précédentes</div>
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ f.previous }}" as="s" hint-placeholder-count="5">
+                  <button onClick="{{ s.open }}" style="display:flex;align-items:center;gap:14px;padding:10px 20px;width:100%;box-sizing:border-box;border-top:1px solid #1c1c1f">
+                    <div style="width:56px;height:70px;flex:none;background:{{ s.cover }};border-left:3px solid {{ s.color }}"></div>
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+                      <div style="font-family:var(--font-title);font-size:22px;line-height:1.05;text-transform:uppercase">{{ s.name }}</div>
+                      <div style="font-size:13px;color:#9a978f">{{ s.dateShort }} · {{ s.count }} photos</div>
+                    </div>
+                    <div style="font-size:22px;color:#5c5a55">›</div>
+                  </button>
+                </sc-for>
+              </div>
+              <div style="padding:40px 20px 40px;font-size:12px;color:#6b6963;border-top:1px solid #1c1c1f">Photos : SAVE</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ f.isSoiree }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;overflow-y:auto;scrollbar-width:none">
+              <div style="background:{{ f.soiree.color }};color:{{ f.soiree.ink }};padding:54px 20px 24px;display:flex;flex-direction:column;gap:22px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <button onClick="{{ f.goHome }}" style="height:44px;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;color:{{ f.soiree.ink }}">← Soirées</button>
+                  <div style="font-family:var(--font-title);font-size:20px;letter-spacing:.02em;white-space:nowrap">NEW80</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-if value="{{ f.soiree.artist }}">
+                    <div style="font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase">Showcase · {{ f.soiree.artist }}</div>
+                  </sc-if>
+                  <div style="font-family:var(--font-title);font-size:60px;line-height:.92;text-transform:uppercase">{{ f.soiree.name }}</div>
+                  <div style="font-size:14px;font-weight:500">{{ f.soiree.dateLong }} · {{ f.soiree.count }} photos</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;padding-top:2px">
+                <sc-for list="{{ f.soiree.photos }}" as="p" hint-placeholder-count="12">
+                  <button onClick="{{ p.open }}" style="aspect-ratio:1;background:{{ p.color }}"></button>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:14px;padding:36px 20px 40px">
+                <a href="mailto:photos@new80.fr?subject=Demande%20de%20retrait%20d%27une%20photo" style="font-size:13px;color:#9a978f;text-decoration:underline;text-underline-offset:3px">Demander le retrait d'une photo</a>
+                <div style="font-size:12px;color:#6b6963">Photos : SAVE</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ f.isViewer }}" hint-placeholder-val="{{ false }}">
+            <div onPointerDown="{{ f.onDown }}" onPointerMove="{{ f.onMove }}" onPointerUp="{{ f.onUp }}" onPointerCancel="{{ f.onUp }}" style="position:absolute;inset:0;z-index:10;background:rgba(0,0,0,{{ f.bgAlpha }});touch-action:none;user-select:none;display:flex;flex-direction:column">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:50px 8px 0 8px;opacity:{{ f.chromeAlpha }}">
+                <button onClick="{{ f.close }}" aria-label="Fermer" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:20px">✕</button>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+                  <div style="font-size:14px;font-weight:600;font-variant-numeric:tabular-nums">{{ f.idx }} / {{ f.soiree.count }}</div>
+                  <div style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9a978f">{{ f.soiree.name }}</div>
+                </div>
+                <div style="width:44px;height:44px"></div>
+              </div>
+              <div style="flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden">
+                <div style="width:{{ f.photo.w }};aspect-ratio:{{ f.photo.ratio }};max-height:100%;background:{{ f.photo.color }};transform:translate({{ f.dx }}px,{{ f.dy }}px) scale({{ f.scale }});transition:{{ f.transition }}"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px;padding:0 16px 34px;opacity:{{ f.chromeAlpha }}">
+                <button onClick="{{ f.save }}" style="height:54px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;font-weight:600;background:{{ f.soiree.color }};color:{{ f.soiree.ink }}">Enregistrer</button>
+                <div style="text-align:center;font-size:12px;color:#6b6963">Glisse vers le bas pour fermer</div>
+              </div>
+              <sc-if value="{{ f.toast }}">
+                <div style="position:absolute;left:16px;right:16px;top:110px;padding:14px 16px;background:#f5f3ee;color:#0a0a0b;font-size:13px;font-weight:500;text-wrap:pretty">{{ f.toast }}</div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;titleFont&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Anton&quot;,&quot;Bebas Neue&quot;,&quot;Oswald&quot;],&quot;default&quot;:&quot;Anton&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Typo&quot;}}">
+const PALETTE = {
+  rouge: { color: '#e1261c', ink: '#ffffff', h: 29, c: 0.07 },
+  bleu: { color: '#2f5bff', ink: '#ffffff', h: 265, c: 0.07 },
+  or: { color: '#d4a73c', ink: '#0a0a0b', h: 85, c: 0.05 },
+  blanc: { color: '#f5f3ee', ink: '#0a0a0b', h: 85, c: 0.004 },
+};
+const RAW = [
+  { slug: 'nuit-rouge', name: 'Nuit Rouge', dateLong: 'Samedi 3 octobre 2026', dateShort: '03.10.2026', c: 'rouge', count: 312 },
+  { slug: 'showcase-kali', name: 'Showcase Kali', dateLong: 'Samedi 26 septembre 2026', dateShort: '26.09.2026', c: 'bleu', artist: 'Kali', count: 248 },
+  { slug: 'golden-era', name: 'Golden Era', dateLong: 'Samedi 19 septembre 2026', dateShort: '19.09.2026', c: 'or', count: 287 },
+  { slug: 'blanc-total', name: 'Blanc Total', dateLong: 'Samedi 12 septembre 2026', dateShort: '12.09.2026', c: 'blanc', count: 351 },
+  { slug: 'red-line', name: 'Red Line', dateLong: 'Samedi 5 septembre 2026', dateShort: '05.09.2026', c: 'rouge', count: 204 },
+  { slug: 'blue-hour', name: 'Blue Hour', dateLong: 'Samedi 29 août 2026', dateShort: '29.08.2026', c: 'bleu', count: 266 },
+  { slug: 'or-noir', name: 'Or Noir', dateLong: 'Samedi 22 août 2026', dateShort: '22.08.2026', c: 'or', count: 230 },
+];
+function rnd(seed) { const x = Math.sin(seed * 9301 + 49297) * 233280; return x - Math.floor(x); }
+function tone(p, seed) {
+  const L = 0.17 + rnd(seed) * 0.16, C = p.c * (0.4 + rnd(seed + 7) * 0.8);
+  return `oklch(${L.toFixed(3)} ${C.toFixed(3)} ${p.h})`;
+}
+const SOIREES = RAW.map((s, si) => {
+  const p = PALETTE[s.c];
+  const photos = Array.from({ length: s.count }, (_, i) => {
+    const land = rnd(si * 1000 + i + 3) > 0.8;
+    return { color: tone(p, si * 1000 + i), ratio: land ? '3/2' : '4/5', w: land ? '100%' : '100%' };
+  });
+  return { ...s, color: p.color, ink: p.ink, cover: tone(p, si * 1000 + 999), photos, artist: s.artist || '' };
+});
+
+class Component extends DCLogic {
+  state = {
+    frames: [
+      { label: '', view: 'home', s: 0, i: 0 },
+    ],
+    drag: {}, toast: {},
+  };
+  setFrame(k, patch) { this.setState(st => ({ frames: st.frames.map((f, j) => j === k ? { ...f, ...patch } : f) })); }
+  flash(k, msg) {
+    this.setState(st => ({ toast: { ...st.toast, [k]: msg } }));
+    clearTimeout(this['t' + k]);
+    this['t' + k] = setTimeout(() => this.setState(st => ({ toast: { ...st.toast, [k]: '' } })), 2600);
+  }
+  setDrag(k, d) { this.setState(st => ({ drag: { ...st.drag, [k]: d } })); }
+  async save(k) {
+    const f = this.state.frames[k], s = SOIREES[f.s];
+    const name = `NEW80-${s.slug}-${String(f.i + 1).padStart(3, '0')}.jpg`;
+    try {
+      const cv = document.createElement('canvas'); cv.width = 800; cv.height = 1000;
+      const ctx = cv.getContext('2d'); ctx.fillStyle = s.photos[f.i].color; ctx.fillRect(0, 0, 800, 1000);
+      const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.85));
+      const file = new File([blob], name, { type: 'image/jpeg' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file] });
+        this.flash(k, 'Feuille de partage ouverte');
+      } else {
+        const url = URL.createObjectURL(blob), a = document.createElement('a');
+        a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        this.flash(k, 'Partage non supporté ici : téléchargement classique de ' + name);
+      }
+    } catch (e) { if (e && e.name !== 'AbortError') this.flash(k, 'Échec, réessaie.'); }
+  }
+  handlers(k, f) {
+    const s = SOIREES[f.s];
+    return {
+      onDown: e => { if (e.target.closest('button')) return; this['g' + k] = { x: e.clientX, y: e.clientY, axis: null }; e.currentTarget.setPointerCapture(e.pointerId); },
+      onMove: e => {
+        const g = this['g' + k]; if (!g) return;
+        const dx = e.clientX - g.x, dy = e.clientY - g.y;
+        if (!g.axis && Math.hypot(dx, dy) > 8) g.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        if (g.axis === 'x') this.setDrag(k, { dx, dy: 0, live: true });
+        if (g.axis === 'y') this.setDrag(k, { dx: 0, dy: Math.max(0, dy), live: true });
+      },
+      onUp: e => {
+        const g = this['g' + k]; this['g' + k] = null; if (!g) return;
+        const d = this.state.drag[k] || {};
+        if (g.axis === 'x' && Math.abs(d.dx) > 60) {
+          const ni = Math.min(s.count - 1, Math.max(0, f.i + (d.dx < 0 ? 1 : -1)));
+          this.setFrame(k, { i: ni });
+        } else if (g.axis === 'y' && d.dy > 110) {
+          this.setFrame(k, { view: 'soiree' });
+        }
+        this.setDrag(k, { dx: 0, dy: 0, live: false });
+      },
+    };
+  }
+  renderVals() {
+    const frames = this.state.frames.slice(0, 1).map((f, k) => {
+      const s = SOIREES[f.s], d = this.state.drag[k] || { dx: 0, dy: 0 };
+      const open = si => () => this.setFrame(k, { view: 'soiree', s: si });
+      const prog = Math.min(1, d.dy / 300);
+      return {
+        label: f.label,
+        isHome: f.view === 'home', isSoiree: f.view === 'soiree', isViewer: f.view === 'viewer',
+        latest: SOIREES[0], openLatest: open(0),
+        previous: SOIREES.slice(1).map((x, j) => ({ ...x, open: open(j + 1) })),
+        goHome: () => this.setFrame(k, { view: 'home' }),
+        soiree: f.view === 'home' ? s : { ...s, photos: s.photos.map((p, i) => ({ ...p, open: () => this.setFrame(k, { view: 'viewer', i }) })) },
+        photo: s.photos[f.i], idx: f.i + 1,
+        dx: d.dx || 0, dy: d.dy || 0, scale: (1 - prog * 0.25).toFixed(3),
+        bgAlpha: (1 - prog * 0.85).toFixed(3), chromeAlpha: (1 - prog * 1.6).toFixed(3),
+        transition: d.live ? 'none' : 'transform 180ms ease-out',
+        close: () => this.setFrame(k, { view: 'soiree' }),
+        save: () => this.save(k),
+        toast: this.state.toast[k] || '',
+        ...this.handlers(k, f),
+      };
+    });
+    return { frames };
+  }
+  componentDidUpdate() { this.applyFont(); }
+  componentDidMount() { this.applyFont(); }
+  applyFont() {
+    const map = { Anton: "'Anton',Impact,sans-serif", 'Bebas Neue': "'Bebas Neue',Impact,sans-serif", Oswald: "'Oswald',Impact,sans-serif" };
+    document.documentElement.style.setProperty('--font-title', map[this.props.titleFont ?? 'Anton'] || map.Anton);
+  }
+}
+</script>
+</body>
+</html>
